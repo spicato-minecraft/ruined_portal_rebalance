@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "ruined_portal_rebalance",
+	"version": "${version}",
+	"name": "Ruined Portal Rebalance",
+	"description": "Ruined portals mark nether fortresses and bastions as rare alternate front doors.",
+	"authors": [
+		"spicato"
+	],
+	"contact": {
+		"sources": "https://github.com/spicato-minecraft/ruined_portal_rebalance"
+	},
+	"license": "CC0-1.0",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"ruined_portal_rebalance.RuinedPortalRebalance"
+		],
+		"client": [
+			"ruined_portal_rebalance.RuinedPortalRebalanceClient"
+		]
+	},
+	"mixins": [
+		"ruined_portal_rebalance.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

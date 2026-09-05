@@ -1,0 +1,17 @@
+{
+	"schemaVersion": 1,
+	"id": "ruined_portal_rebalance_test",
+	"version": "${version}",
+	"name": "Ruined Portal Rebalance Game Tests",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-gametest": [
+			"ruined_portal_rebalance.gametest.IncompletePortalGameTest"
+		]
+	},
+	"depends": {
+		"ruined_portal_rebalance": "*",
+		"fabric-api": "*",
+		"minecraft": "~1.21.11"
+	}
+}
