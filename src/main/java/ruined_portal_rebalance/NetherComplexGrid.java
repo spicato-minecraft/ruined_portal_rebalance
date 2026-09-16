@@ -16,8 +16,12 @@ public final class NetherComplexGrid {
 	public static final int SALT = 30084232;
 	public static final int NETHER_CHUNKS_PER_OVERWORLD_REGION = 8;
 	public static final int LANDING_SALT = 58492011;
-	/** Blocks from the nether-complex start-chunk middle along a hashed cardinal. */
-	public static final int LANDING_OFFSET = 40;
+	/**
+	 * Blocks from the nether-complex start-chunk middle along a hashed cardinal.
+	 * Kept near a typical fortress/bastion exterior so the 16-block portal POI
+	 * window can hug the wall instead of sitting in open netherrack.
+	 */
+	public static final int LANDING_OFFSET = 24;
 
 	private NetherComplexGrid() {
 	}

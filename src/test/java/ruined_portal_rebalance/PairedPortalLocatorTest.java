@@ -48,6 +48,43 @@ class PairedPortalLocatorTest {
 	}
 
 	@Test
+	void locateAcceptsDirectPairedPortalIds() {
+		assertTrue(PairedPortalLocator.isPairedPortalId(
+				net.minecraft.resources.Identifier.fromNamespaceAndPath("ruined_portal_rebalance", "paired_portal")));
+		assertTrue(PairedPortalLocator.isPairedPortalId(
+				net.minecraft.resources.Identifier.fromNamespaceAndPath("ruined_portal_rebalance", "paired_portal_ocean")));
+		assertTrue(!PairedPortalLocator.isPairedPortalId(
+				net.minecraft.resources.Identifier.fromNamespaceAndPath("minecraft", "ruined_portal")));
+	}
+
+	@Test
+	void vanillaLocateRadiusCanMissNearestNetherStart() {
+		long seed = 42L;
+		int locateNetherRadius = Math.floorDiv(100, NetherComplexGrid.NETHER_CHUNKS_PER_OVERWORLD_REGION) + 1;
+		boolean missed = false;
+		for (int x = 0; x < NetherComplexGrid.SPACING; x++) {
+			for (int z = 0; z < NetherComplexGrid.SPACING; z++) {
+				if (PairedPortalLocator.nearestNetherStartChunk(seed, x, z, locateNetherRadius).isEmpty()) {
+					missed = true;
+					break;
+				}
+			}
+		}
+		assertTrue(missed, "100-chunk overworld /locate maps to nether radius " + locateNetherRadius
+				+ ", which is smaller than half of spacing " + NetherComplexGrid.SPACING);
+	}
+
+	@Test
+	void fullRegionRadiusAlwaysFindsNearestNetherStart() {
+		long seed = 42L;
+		for (int x = 0; x < NetherComplexGrid.SPACING; x++) {
+			for (int z = 0; z < NetherComplexGrid.SPACING; z++) {
+				assertTrue(PairedPortalLocator.nearestNetherStartChunk(seed, x, z, NetherComplexGrid.SPACING).isPresent());
+			}
+		}
+	}
+
+	@Test
 	void overworldAnchorIsEightTimesNetherLanding() {
 		long seed = 999L;
 		ChunkPos nether = NetherComplexGrid.startChunk(seed, 0, 0);

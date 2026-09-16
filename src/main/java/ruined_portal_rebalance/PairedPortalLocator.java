@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  * Seed-only nearest paired ruin for {@code /locate structure #ruined_portal_rebalance:paired_portals}.
  * Overworld: 8:1 of {@link NetherComplexGrid#netherLanding}.
- * Nether: that same landing (outside the complex, within 50 blocks).
+ * Nether: that same landing (just outside the fortress/bastion wall).
  */
 public final class PairedPortalLocator {
 	public static final TagKey<Structure> PAIRED_PORTALS = TagKey.create(
@@ -28,11 +28,25 @@ public final class PairedPortalLocator {
 	private PairedPortalLocator() {
 	}
 
-	public static boolean requestsPairedPortalTag(HolderSet<Structure> structures) {
+	public static boolean requestsPairedPortal(HolderSet<Structure> structures) {
 		if (structures instanceof HolderSet.Named<Structure> named) {
 			return PAIRED_PORTALS.equals(named.key());
 		}
+		for (Holder<Structure> holder : structures) {
+			if (holder.is(PAIRED_PORTALS)) {
+				return true;
+			}
+			if (holder.unwrapKey().map(key -> isPairedPortalId(key.identifier())).orElse(false)) {
+				return true;
+			}
+		}
 		return false;
+	}
+
+	public static boolean isPairedPortalId(Identifier id) {
+		return id != null
+				&& RuinedPortalRebalance.MOD_ID.equals(id.getNamespace())
+				&& id.getPath().startsWith("paired_portal");
 	}
 
 	public static Optional<Holder<Structure>> firstHolder(HolderSet<Structure> structures) {
@@ -56,19 +70,24 @@ public final class PairedPortalLocator {
 			return Optional.empty();
 		}
 		ChunkPos query = ChunkPos.containing(origin);
+		// Vanilla /locate uses a 100-chunk spiral. Paired ruins follow nether_complex
+		// spacing (27 nether chunks ≈ 216 overworld chunks at 8:1), so that cap often
+		// misses the nearest pairing. Always search at least one full nether region
+		// and return that seed landing even if it is farther than 100 chunks.
+		int netherRadius = Math.max(
+				effectiveNetherSearchRadius(level, searchRadiusChunks),
+				NetherComplexGrid.SPACING
+		);
 		Optional<ChunkPos> netherStart = nearestNetherStartChunk(
 				level.getSeed(),
 				netherQueryChunk(level, query).x(),
 				netherQueryChunk(level, query).z(),
-				effectiveNetherSearchRadius(level, searchRadiusChunks)
+				netherRadius
 		);
 		if (netherStart.isEmpty()) {
 			return Optional.empty();
 		}
 		BlockPos pos = locatePos(level, netherStart.get(), origin.getY());
-		if (chunkDistance(query, ChunkPos.containing(pos)) > searchRadiusChunks) {
-			return Optional.empty();
-		}
 		return Optional.of(Pair.of(pos, marker.get()));
 	}
 

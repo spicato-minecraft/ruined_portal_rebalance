@@ -1,6 +1,6 @@
 # Ruined Portal Rebalance
 
-A Fabric mod for Minecraft **26.1**. Vanilla ruined-portal scatter is removed. Each nether fortress and bastion remnant gets an **incomplete** ruined portal **outside** the complex (within 50 blocks). The Overworld has a matching **surface** ruin at the 8:1 projection of that landing, so you can find complexes from the Overworld. Lighting the Overworld portal uses **vanilla linking** and drops you beside the structure — not in the treasure. You still have to enter and clear the complex.
+A Fabric mod for Minecraft **26.1**. Vanilla ruined-portal scatter is removed. Each nether fortress and bastion remnant gets an **incomplete** ruined portal **against the exterior wall** — a gate the complex built to reach the Overworld. The Overworld has a matching **surface** ruin at the 8:1 projection of that landing, so you can find complexes from the Overworld. Lighting the Overworld portal uses **vanilla linking** and drops you beside the structure — not in the treasure. You still have to enter and clear the complex.
 
 New chunks only. Existing worlds keep vanilla scatter in already generated chunks.
 
@@ -18,8 +18,8 @@ New chunks only. Existing worlds keep vanilla scatter in already generated chunk
 - Vanilla `ruined_portals` structure set frequency is 0 (no independent scatter).
 - `nether_complexes` weights start at bastion **4** / fortress **1** (vanilla was 3:2). Grid spacing is unchanged.
 - Overworld: datapack structures `ruined_portal_rebalance:paired_portal*` reuse vanilla ruined-portal templates with **surface** setups only (no cave/underground). Placement is `overworld_nether_complex_anchor` (8:1 of the nether exterior landing). Oceans/swamps still use the seafloor setup.
-- Nether inject: after fortress/bastion generate, one incomplete frame **outside** the bounding box, within 50 blocks, and within 16 blocks of the seed landing so vanilla portal search links instead of carving a new portal in the center.
-- Testing: `/locate structure #ruined_portal_rebalance:paired_portals` uses that same landing (seed-only).
+- Nether inject: after fortress/bastion generate, one incomplete frame **just outside** the bounding box (about 4 blocks from the wall), still within 16 blocks of the seed landing so vanilla portal search links instead of carving a new portal in the center.
+- Testing: `/locate structure #ruined_portal_rebalance:paired_portals` or `/locate structure ruined_portal_rebalance:paired_portal` uses that same landing (seed-only).
 
 ## Branch policy
 

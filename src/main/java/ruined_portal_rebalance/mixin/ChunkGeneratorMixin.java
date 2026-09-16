@@ -27,7 +27,7 @@ public class ChunkGeneratorMixin {
 			boolean skipKnownStructures,
 			CallbackInfoReturnable<Pair<BlockPos, Holder<Structure>>> cir
 	) {
-		if (!PairedPortalLocator.requestsPairedPortalTag(structures)) {
+		if (!PairedPortalLocator.requestsPairedPortal(structures)) {
 			return;
 		}
 		Optional<Pair<BlockPos, Holder<Structure>>> paired =
