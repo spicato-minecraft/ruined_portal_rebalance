@@ -27,6 +27,19 @@ public final class IncompletePortalPlacer {
 		if (alreadyPresent(level, origin)) {
 			return;
 		}
+		if (!level.getBlockState(floor).isSolid() || level.getBlockState(floor).liquid()) {
+			level.setBlock(floor, Blocks.NETHERRACK.defaultBlockState(), 2);
+		}
+		applyFrame(origin, random, (pos, state) -> level.setBlock(pos, state, 2));
+		BlockPos chestPos = origin.offset(4, 0, 1);
+		level.setBlock(chestPos, Blocks.CHEST.defaultBlockState(), 2);
+		BlockEntity be = level.getBlockEntity(chestPos);
+		if (be instanceof ChestBlockEntity chest) {
+			chest.setLootTable(BuiltInLootTables.RUINED_PORTAL, random.nextLong());
+		}
+	}
+
+	private static void applyFrame(BlockPos origin, RandomSource random, java.util.function.BiConsumer<BlockPos, BlockState> set) {
 		for (int dx = 0; dx < 4; dx++) {
 			for (int dy = 0; dy < 5; dy++) {
 				BlockPos pos = origin.offset(dx, dy, 0);
@@ -34,22 +47,16 @@ public final class IncompletePortalPlacer {
 				boolean skip = isMissingCell(dx, dy);
 				if (!frame) {
 					if (dx >= 1 && dx <= 2 && dy >= 1 && dy <= 3) {
-						level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+						set.accept(pos, Blocks.AIR.defaultBlockState());
 					}
 					continue;
 				}
 				if (skip) {
-					level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+					set.accept(pos, Blocks.AIR.defaultBlockState());
 					continue;
 				}
-				level.setBlock(pos, frameBlock(random), 2);
+				set.accept(pos, frameBlock(random));
 			}
-		}
-		BlockPos chestPos = origin.offset(4, 0, 1);
-		level.setBlock(chestPos, Blocks.CHEST.defaultBlockState(), 2);
-		BlockEntity be = level.getBlockEntity(chestPos);
-		if (be instanceof ChestBlockEntity chest) {
-			chest.setLootTable(BuiltInLootTables.RUINED_PORTAL, random.nextLong());
 		}
 	}
 

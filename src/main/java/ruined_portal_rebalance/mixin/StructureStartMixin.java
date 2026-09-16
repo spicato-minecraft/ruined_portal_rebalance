@@ -30,7 +30,7 @@ public class StructureStartMixin {
 		try {
 			PortalPairing.afterNetherStructurePlaced(level, (StructureStart) (Object) this, chunkPos, random);
 		} catch (RuntimeException e) {
-			RuinedPortalRebalance.LOGGER.error("Nether front-door portal failed in chunk {}", chunkPos, e);
+			RuinedPortalRebalance.LOGGER.error("Nether exterior portal failed in chunk {}", chunkPos, e);
 		}
 	}
 }

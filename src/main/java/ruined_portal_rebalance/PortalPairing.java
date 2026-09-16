@@ -9,8 +9,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
@@ -41,31 +39,18 @@ public final class PortalPairing {
 			return;
 		}
 		BoundingBox box = start.getBoundingBox();
-		BlockPos prefer = placingChunk.getMiddleBlockPosition(box.minY() + 4);
-		BlockPos door = FrontDoorFinder.find(level, box, prefer);
-		if (door == null) {
-			RuinedPortalRebalance.LOGGER.debug("No front-door stand in {} at {}", start.getStructure(), placingChunk);
-			return;
-		}
-		IncompletePortalPlacer.place(level, door, random);
-	}
-
-	public static void tryPlaceOverworldAnchor(ServerLevel level, ChunkPos chunk, ChunkGenerator generator) {
-		if (level.dimension() != Level.OVERWORLD) {
-			return;
-		}
-		long seed = level.getSeed();
-		if (!NetherComplexGrid.isOverworldAnchorChunk(seed, chunk.x, chunk.z)) {
-			return;
-		}
-		int x = chunk.getMiddleBlockX();
-		int z = chunk.getMiddleBlockZ();
-		int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
-		if (y < level.getMinY() + 4) {
-			y = generator.getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, level, level.getChunkSource().randomState());
-		}
-		BlockPos floor = new BlockPos(x, y - 1, z);
-		IncompletePortalPlacer.place(level, floor, RandomSource.create(seed ^ chunk.toLong()));
+		long seed = server.getSeed();
+		ChunkPos startChunk = start.getChunkPos();
+		int dir = NetherComplexGrid.landingDirectionIndex(seed, startChunk);
+		BlockPos seedLanding = NetherComplexGrid.netherLanding(seed, startChunk);
+		BlockPos floor = ExteriorPortalSiting.findFloor(
+				level,
+				box,
+				seedLanding,
+				NetherComplexGrid.dirX(dir),
+				NetherComplexGrid.dirZ(dir)
+		);
+		IncompletePortalPlacer.place(level, floor, random);
 	}
 
 	static boolean isNetherComplex(ServerLevel level, Structure structure) {

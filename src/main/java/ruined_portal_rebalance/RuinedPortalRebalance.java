@@ -10,6 +10,7 @@ public class RuinedPortalRebalance implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		OverworldNetherComplexAnchorPlacement.register();
 		LOGGER.info("Ruined Portal Rebalance: portals pair with nether complexes");
 	}
 }

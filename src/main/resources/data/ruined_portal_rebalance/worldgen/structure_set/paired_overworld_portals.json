@@ -1,0 +1,32 @@
+{
+	"placement": {
+		"type": "ruined_portal_rebalance:overworld_nether_complex_anchor",
+		"salt": 58492011
+	},
+	"structures": [
+		{
+			"structure": "ruined_portal_rebalance:paired_portal",
+			"weight": 1
+		},
+		{
+			"structure": "ruined_portal_rebalance:paired_portal_desert",
+			"weight": 1
+		},
+		{
+			"structure": "ruined_portal_rebalance:paired_portal_jungle",
+			"weight": 1
+		},
+		{
+			"structure": "ruined_portal_rebalance:paired_portal_swamp",
+			"weight": 1
+		},
+		{
+			"structure": "ruined_portal_rebalance:paired_portal_mountain",
+			"weight": 1
+		},
+		{
+			"structure": "ruined_portal_rebalance:paired_portal_ocean",
+			"weight": 1
+		}
+	]
+}

@@ -1,3 +1,9 @@
 {
-	"modmenu.nameTranslation.ruined_portal_rebalance": "Ruined Portal Rebalance"
+	"modmenu.nameTranslation.ruined_portal_rebalance": "Ruined Portal Rebalance",
+	"structure.ruined_portal_rebalance.paired_portal": "Paired Ruined Portal",
+	"structure.ruined_portal_rebalance.paired_portal_desert": "Paired Desert Ruined Portal",
+	"structure.ruined_portal_rebalance.paired_portal_jungle": "Paired Jungle Ruined Portal",
+	"structure.ruined_portal_rebalance.paired_portal_mountain": "Paired Mountain Ruined Portal",
+	"structure.ruined_portal_rebalance.paired_portal_ocean": "Paired Ocean Ruined Portal",
+	"structure.ruined_portal_rebalance.paired_portal_swamp": "Paired Swamp Ruined Portal"
 }

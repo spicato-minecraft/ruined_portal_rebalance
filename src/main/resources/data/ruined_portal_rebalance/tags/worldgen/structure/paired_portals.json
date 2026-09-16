@@ -1,0 +1,11 @@
+{
+	"replace": false,
+	"values": [
+		"ruined_portal_rebalance:paired_portal",
+		"ruined_portal_rebalance:paired_portal_desert",
+		"ruined_portal_rebalance:paired_portal_jungle",
+		"ruined_portal_rebalance:paired_portal_mountain",
+		"ruined_portal_rebalance:paired_portal_ocean",
+		"ruined_portal_rebalance:paired_portal_swamp"
+	]
+}

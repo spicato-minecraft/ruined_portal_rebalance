@@ -3,7 +3,7 @@
 	"id": "ruined_portal_rebalance",
 	"version": "${version}",
 	"name": "Ruined Portal Rebalance",
-	"description": "Ruined portals mark nether fortresses and bastions as rare alternate front doors.",
+	"description": "Ruined portals mark nether fortresses and bastions from the Overworld, landing you outside the complex.",
 	"authors": [
 		"spicato"
 	],
@@ -25,8 +25,8 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.19.3",
-		"minecraft": "~1.21.11",
-		"java": ">=21",
+		"minecraft": "~26.1",
+		"java": ">=25",
 		"fabric-api": "*"
 	}
 }

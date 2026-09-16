@@ -11,7 +11,7 @@ Write for players, not developers. Focus on what changed in the game.
 ```markdown
 - Ruined portals no longer scatter across the world
 - Each ruined portal in the Overworld marks a nether fortress or bastion remnant
-- Lighting a repaired portal drops you at a hostile front door inside that structure, not next to the loot
+- Lighting a repaired portal drops you just outside that fortress or bastion, not in the treasure
 ```
 
 ## Guidelines

@@ -1,18 +1,23 @@
 package ruined_portal_rebalance;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 
 /**
- * Seed-only replica of vanilla {@code nether_complexes} random_spread (linear).
- * Spacing 27, separation 4, salt 30084232.
+ * Seed-only replica of vanilla {@code nether_complexes} random_spread (linear),
+ * plus a hashed exterior landing used by both dimensions so vanilla portal
+ * linking (16-block nether POI search) finds the paired ruin.
  */
 public final class NetherComplexGrid {
 	public static final int SPACING = 27;
 	public static final int SEPARATION = 4;
 	public static final int SALT = 30084232;
 	public static final int NETHER_CHUNKS_PER_OVERWORLD_REGION = 8;
+	public static final int LANDING_SALT = 58492011;
+	/** Blocks from the nether-complex start-chunk middle along a hashed cardinal. */
+	public static final int LANDING_OFFSET = 40;
 
 	private NetherComplexGrid() {
 	}
@@ -30,34 +35,64 @@ public final class NetherComplexGrid {
 
 	public static boolean isStructureChunk(long worldSeed, int chunkX, int chunkZ) {
 		ChunkPos start = startChunk(worldSeed, chunkX, chunkZ);
-		return start.x == chunkX && start.z == chunkZ;
+		return start.x() == chunkX && start.z() == chunkZ;
+	}
+
+	public static int landingDirectionIndex(long worldSeed, ChunkPos netherStartChunk) {
+		WorldgenRandom random = new WorldgenRandom(new LegacyRandomSource(0L));
+		random.setLargeFeatureWithSalt(worldSeed, netherStartChunk.x(), netherStartChunk.z(), LANDING_SALT);
+		return random.nextInt(4);
+	}
+
+	public static int dirX(int directionIndex) {
+		return switch (directionIndex) {
+			case 0 -> 1;
+			case 1 -> -1;
+			default -> 0;
+		};
+	}
+
+	public static int dirZ(int directionIndex) {
+		return switch (directionIndex) {
+			case 2 -> 1;
+			case 3 -> -1;
+			default -> 0;
+		};
 	}
 
 	/**
-	 * Overworld chunk that holds the 8:1 projection of a nether structure-start chunk origin.
+	 * Nether XZ where the incomplete portal and the Overworld 8:1 destination agree.
 	 */
-	public static ChunkPos overworldAnchorChunk(ChunkPos netherStartChunk) {
-		return new ChunkPos(
-				netherStartChunk.x * NETHER_CHUNKS_PER_OVERWORLD_REGION,
-				netherStartChunk.z * NETHER_CHUNKS_PER_OVERWORLD_REGION
+	public static BlockPos netherLanding(long worldSeed, ChunkPos netherStartChunk) {
+		int dir = landingDirectionIndex(worldSeed, netherStartChunk);
+		return new BlockPos(
+				netherStartChunk.getMiddleBlockX() + dirX(dir) * LANDING_OFFSET,
+				0,
+				netherStartChunk.getMiddleBlockZ() + dirZ(dir) * LANDING_OFFSET
 		);
 	}
 
+	public static ChunkPos overworldAnchorChunk(long worldSeed, ChunkPos netherStartChunk) {
+		BlockPos nether = netherLanding(worldSeed, netherStartChunk);
+		return ChunkPos.containing(new BlockPos(
+				nether.getX() * NETHER_CHUNKS_PER_OVERWORLD_REGION,
+				0,
+				nether.getZ() * NETHER_CHUNKS_PER_OVERWORLD_REGION
+		));
+	}
+
 	public static boolean isOverworldAnchorChunk(long worldSeed, int overworldChunkX, int overworldChunkZ) {
-		if (Math.floorMod(overworldChunkX, NETHER_CHUNKS_PER_OVERWORLD_REGION) != 0
-				|| Math.floorMod(overworldChunkZ, NETHER_CHUNKS_PER_OVERWORLD_REGION) != 0) {
-			return false;
+		int sampleX = Math.floorDiv(overworldChunkX, NETHER_CHUNKS_PER_OVERWORLD_REGION);
+		int sampleZ = Math.floorDiv(overworldChunkZ, NETHER_CHUNKS_PER_OVERWORLD_REGION);
+		ChunkPos want = new ChunkPos(overworldChunkX, overworldChunkZ);
+		for (int rx = -1; rx <= 1; rx++) {
+			for (int rz = -1; rz <= 1; rz++) {
+				ChunkPos start = startChunk(worldSeed, sampleX + rx * SPACING, sampleZ + rz * SPACING);
+				if (overworldAnchorChunk(worldSeed, start).equals(want)) {
+					return true;
+				}
+			}
 		}
-		int netherX = Math.floorDiv(overworldChunkX, NETHER_CHUNKS_PER_OVERWORLD_REGION);
-		int netherZ = Math.floorDiv(overworldChunkZ, NETHER_CHUNKS_PER_OVERWORLD_REGION);
-		return isStructureChunk(worldSeed, netherX, netherZ);
-	}
-
-	public static int overworldBlockX(ChunkPos netherStartChunk) {
-		return netherStartChunk.getMiddleBlockX() * NETHER_CHUNKS_PER_OVERWORLD_REGION;
-	}
-
-	public static int overworldBlockZ(ChunkPos netherStartChunk) {
-		return netherStartChunk.getMiddleBlockZ() * NETHER_CHUNKS_PER_OVERWORLD_REGION;
+		return false;
 	}
 }
