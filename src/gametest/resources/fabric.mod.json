@@ -6,7 +6,11 @@
 	"environment": "*",
 	"entrypoints": {
 		"fabric-gametest": [
-			"ruined_portal_rebalance.gametest.IncompletePortalGameTest"
+			"ruined_portal_rebalance.gametest.IncompletePortalGameTest",
+			"ruined_portal_rebalance.gametest.ServerMixinApplySweep",
+			"ruined_portal_rebalance.gametest.DatapackRemovesScatter",
+			"ruined_portal_rebalance.gametest.LocateUsesPairedPortal",
+			"ruined_portal_rebalance.gametest.FortressStartPlacesFrame"
 		]
 	},
 	"depends": {
