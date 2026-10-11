@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -76,14 +78,16 @@ public class FortressStartPlacesFrame {
 		StructureStart smallest = StructureStart.INVALID_START;
 		int smallestSpan = Integer.MAX_VALUE;
 		for (ChunkPos chunkPos : nearbyChunks()) {
+			RandomState randomState = nether.getChunkSource().randomState();
 			StructureStart generated = fortress.value().generate(
 					fortress,
 					Level.NETHER,
 					nether.registryAccess(),
 					generator,
 					generator.getBiomeSource(),
-					nether.getChunkSource().randomState(),
-					nether.getStructureManager(),
+					randomState.createClimateSampler(SamplerContext.EMPTY_UNCACHED),
+					randomState,
+					nether.getStructureTemplateManager(),
 					nether.getSeed(),
 					chunkPos,
 					0,

@@ -1,6 +1,6 @@
 # Ruined Portal Rebalance
 
-A Fabric mod for Minecraft **26.2**. Vanilla ruined-portal scatter is removed. Each nether fortress and bastion remnant gets an **incomplete** ruined portal **against the exterior wall** — a gate the complex built to reach the Overworld. The Overworld has a matching **surface** ruin at the 8:1 projection of that landing, so you can find complexes from the Overworld. Lighting the Overworld portal uses **vanilla linking** and drops you beside the structure — not in the treasure. You still have to enter and clear the complex.
+A Fabric mod for Minecraft **26.3**. Vanilla ruined-portal scatter is removed. Each nether fortress and bastion remnant gets an **incomplete** ruined portal **against the exterior wall** — a gate the complex built to reach the Overworld. The Overworld has a matching **surface** ruin at the 8:1 projection of that landing, so you can find complexes from the Overworld. Lighting the Overworld portal uses **vanilla linking** and drops you beside the structure — not in the treasure. You still have to enter and clear the complex.
 
 New chunks only. Existing worlds keep vanilla scatter in already generated chunks.
 
@@ -8,9 +8,9 @@ New chunks only. Existing worlds keep vanilla scatter in already generated chunk
 
 | Component     | Version           |
 |---------------|-------------------|
-| Minecraft     | 26.2              |
-| Fabric Loader | 0.19.3+           |
-| Fabric API    | 0.161.0+26.2      |
+| Minecraft     | 26.3              |
+| Fabric Loader | 0.19.5+           |
+| Fabric API    | 0.162.0+26.3      |
 | Java          | 25+               |
 
 ## Behavior
@@ -23,12 +23,12 @@ New chunks only. Existing worlds keep vanilla scatter in already generated chunk
 
 ## Branch policy
 
-Each supported Minecraft version has its own branch (e.g. `26.2`). Version branches are the source of truth — there is no `main`.
+Each supported Minecraft version has its own branch (e.g. `26.3`). Version branches are the source of truth — there is no `main`.
 
 ```bash
 git clone https://github.com/spicato-minecraft/ruined_portal_rebalance.git
 cd ruined_portal_rebalance
-git checkout 26.2
+git checkout 26.3
 ```
 
 ## Build & test

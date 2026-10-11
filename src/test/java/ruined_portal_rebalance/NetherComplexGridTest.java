@@ -1,6 +1,8 @@
 package ruined_portal_rebalance;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NetherComplexGridTest {
@@ -64,7 +67,10 @@ class NetherComplexGridTest {
 	@Test
 	void overworldPlacementTypeRegisters() {
 		OverworldNetherComplexAnchorPlacement.register();
-		assertNotNull(OverworldNetherComplexAnchorPlacement.TYPE);
-		assertNotNull(OverworldNetherComplexAnchorPlacement.TYPE.codec());
+		assertSame(
+				OverworldNetherComplexAnchorPlacement.CODEC,
+				BuiltInRegistries.STRUCTURE_PLACEMENT.getValue(
+						Identifier.fromNamespaceAndPath(RuinedPortalRebalance.MOD_ID, "overworld_nether_complex_anchor"))
+		);
 	}
 }

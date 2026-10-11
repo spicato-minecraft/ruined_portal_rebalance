@@ -7,8 +7,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
+import net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement;
 
 import java.util.Optional;
 
@@ -16,12 +15,12 @@ import java.util.Optional;
  * Structure-set placement: Overworld chunks that are the 8:1 projection of a nether-complex start.
  * Datapack structure sets list surface-only {@code ruined_portal_rebalance:paired_portal*} structures; this type supplies where.
  */
-public final class OverworldNetherComplexAnchorPlacement extends StructurePlacement {
+public final class OverworldNetherComplexAnchorPlacement extends AbstractSpreadingStructurePlacement {
 	public static final MapCodec<OverworldNetherComplexAnchorPlacement> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> placementCodec(instance).apply(instance, OverworldNetherComplexAnchorPlacement::new)
 	);
 
-	public static StructurePlacementType<OverworldNetherComplexAnchorPlacement> TYPE;
+	private static boolean registered;
 
 	private OverworldNetherComplexAnchorPlacement(
 			Vec3i locateOffset,
@@ -34,14 +33,15 @@ public final class OverworldNetherComplexAnchorPlacement extends StructurePlacem
 	}
 
 	public static void register() {
-		if (TYPE != null) {
+		if (registered) {
 			return;
 		}
-		TYPE = Registry.register(
+		Registry.register(
 				BuiltInRegistries.STRUCTURE_PLACEMENT,
 				Identifier.fromNamespaceAndPath(RuinedPortalRebalance.MOD_ID, "overworld_nether_complex_anchor"),
-				() -> CODEC
+				CODEC
 		);
+		registered = true;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public final class OverworldNetherComplexAnchorPlacement extends StructurePlacem
 	}
 
 	@Override
-	public StructurePlacementType<?> type() {
-		return TYPE;
+	public MapCodec<OverworldNetherComplexAnchorPlacement> codec() {
+		return CODEC;
 	}
 }
